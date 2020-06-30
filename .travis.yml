@@ -40,8 +40,8 @@ install:
   - cmake $PARENTDIR -DCMAKE_BUILD_TYPE=Debug -DBUILD_DEBUG_LEVEL=2 -DCMAKE_CXX_COMPILER=$CXX_COMPILER
   - make
 
-    #script:
-    #  - make coverage
+script:
+  - make && make test
 
     #after_success:
     #  - cd $PARENTDIR/build
