@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 3.6)
 list(APPEND tests_sources
     main.cpp
 )
-list(REMOVE_DUPLICATES ${tests_sources})
+list(REMOVE_DUPLICATES tests_sources)
 
 list(APPEND lib_depends ${LIBRARY_NAME})
 
