@@ -2,19 +2,23 @@ cmake_minimum_required(VERSION 3.6)
 
 # List all files containing tests.
 list(APPEND tests_sources
-    main.cpp
+    test_vector.cpp
+    test_main.cpp
 )
 list(REMOVE_DUPLICATES tests_sources)
 
-list(APPEND lib_depends ${LIBRARY_NAME})
+list(APPEND lib_depends ${LIBRARY_NAME} doctest)
 
-set(TEST_MAIN unit_tests)
-set(TEST_RUNNER_PARAMS "")
+set(TEST_MAIN unit_tests)   # Default name for test executable (change if you wish).
+set(TEST_RUNNER_PARAMS "")  # Any arguemnts to feed the test runner (change as needed).
 
+# --------------------------------------------------------------------------------
+#                         Make Tests (no change needed).
+# --------------------------------------------------------------------------------
 add_executable(${TEST_MAIN} ${tests_sources})
 target_link_libraries(${TEST_MAIN} PRIVATE ${lib_depends})
-#set_target_properties(${TEST_MAIN} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR})
-#target_set_warnings(${TEST_MAIN} ENABLE ALL AS_ERROR ALL DISABLE Annoying) # Set warnings (if needed).
+set_target_properties(${TEST_MAIN} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin)
+#target_set_warnings(${TEST_MAIN} ENABLE ALL AS_ERROR ALL DISABLE Annoying)
 
 set_target_properties(${TEST_MAIN} PROPERTIES 
     CXX_STANDARD 17 
@@ -42,7 +46,8 @@ if (CMAKE_BUILD_TYPE STREQUAL "Coverage")
         )
     add_custom_command(TARGET coverage
         COMMAND echo "=================== GCOV ===================="
-        COMMAND gcov -b ${CMAKE_SOURCE_DIR}/tests/*.cpp -o ${TEST_MAIN_OBJ_DIR} > CoverageSummary.txt
+        COMMAND rm -f ${TEST_MAIN_OBJ_DIR}/test_main.gcno  ${TEST_MAIN_OBJ_DIR}/test_main.gcda  ${TEST_MAIN_OBJ_DIR}/test_main.o
+        COMMAND gcov -m -b ${CMAKE_SOURCE_DIR}/tests/*.cpp -o ${TEST_MAIN_OBJ_DIR} > CoverageSummary.txt
         COMMAND cat CoverageSummary.txt
         COMMAND echo "-- Coverage files have been output to ${CMAKE_BINARY_DIR}/coverage"
         WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/coverage  # Need separate command for this line
