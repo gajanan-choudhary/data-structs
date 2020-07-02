@@ -2,6 +2,7 @@
 [![Build Status](https://api.travis-ci.org/gajanan-choudhary/data-structs.svg?branch=master)](https://travis-ci.org/gajanan-choudhary/data-structs)
 [![license](https://img.shields.io/badge/license-Unlicense-blue.svg)](https://github.com/gajanan-choudhary/data-structs/blob/master/LICENSE)
 [![Lines of Code](https://tokei.rs/b1/github/gajanan-choudhary/data-structs)](https://github.com/Aaronepower/tokei)
+[![Coverage Status](https://coveralls.io/repos/github/gajanan-choudhary/data-structs/badge.svg?branch=add_gcov)](https://coveralls.io/github/gajanan-choudhary/data-structs?branch=add_gcov)
 [![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/gajanan-choudhary/data-structs.svg)](http://isitmaintained.com/project/gajanan-choudhary/data-structs "Average time to resolve an issue")
 [![Percentage of issues still open](http://isitmaintained.com/badge/open/gajanan-choudhary/data-structs.svg)](http://isitmaintained.com/project/gajanan-choudhary/data-structs "Percentage of issues still open")
 
@@ -11,13 +12,15 @@ A C++ data structures library.
 
 ## Building
 
-Select one of "Debug", "Release", or "RelWithDebInfo" build types below:
+Select one of "Debug", "Release", "RelWithDebInfo", or "Coverage" build types
+below:
 
 ``` bash
 mkdir build && cd build
-cmake .. -DCMAKE_BUILD_TYPE=[Debug | Release | RelWithDebInfo]
+cmake .. -DCMAKE_BUILD_TYPE=[Debug | Release | RelWithDebInfo | Coverage]
 make
 make test      # Unit testing
+make coverage  # Unit testing + Coverage. For Coverage build only.
 ```
 
 ## Bells and whistles
@@ -25,4 +28,4 @@ make test      # Unit testing
 -   [CMake](https://cmake.org/) build system for easy compilation
 -   [Travis-CI](https://travis-ci.org/) for continuous testing
 -   [Doxygen](http://www.stack.nl/~dimitri/doxygen/) for documentation
-
+-   [Coveralls.io](https://coveralls.io/) for posting code coverage reports
