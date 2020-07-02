@@ -17,6 +17,7 @@ matrix:
             - g++-7
       env:
         - MATRIX_EVAL="CXX_COMPILER=g++-7; sudo update-alternatives --install /usr/bin/gcov gcov /usr/bin/gcov-7 90"
+        - MATRIX_EVAL_COVERALLS="pip install --user cpp-coveralls;"
 
     - os: osx
       osx_image: xcode10.1
@@ -27,15 +28,14 @@ matrix:
       #    update: true
       env:
         - MATRIX_EVAL="CXX_COMPILER=clang++"
-        - MATRIX_EVAL_OSX_COVERALLS="brew update; brew install pyenv; eval "$(pyenv init -)"; pyenv install 2.7.6; pyenv global 2.7.6; pyenv rehash; pip install cpp-coveralls; pyenv rehash;"
+        - MATRIX_EVAL_COVERALLS="brew update; brew install pyenv; eval "$(pyenv init -)"; pyenv install 2.7.6; pyenv global 2.7.6; pyenv rehash; pip install coveralls; pip install cpp-coveralls; pyenv rehash;"
  
 
 before_install:
   - eval "${MATRIX_EVAL}"
-  - eval "${MATRIX_EVAL_OSX_COVERALLS}"
+  - eval "${MATRIX_EVAL_COVERALLS}"
   - PARENTDIR=$(pwd)
   - mkdir $PARENTDIR/build
-  - pip install --user cpp-coveralls
 
 install: 
   - cd $PARENTDIR/build
@@ -47,7 +47,7 @@ script:
 
 after_success:
   - cd $PARENTDIR
-  - coveralls -e build/
+  - coveralls -e build/  --gcov-options '\-lp'
 
     #after_success:
     #  - cd $PARENTDIR/build
