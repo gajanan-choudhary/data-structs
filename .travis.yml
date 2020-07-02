@@ -27,9 +27,12 @@ matrix:
       #    update: true
       env:
         - MATRIX_EVAL="CXX_COMPILER=clang++"
+        - MATRIX_EVAL_OSX_COVERALLS="brew update; brew install pyenv; eval "$(pyenv init -)"; pyenv install 2.7.6; pyenv global 2.7.6; pyenv rehash; pip install cpp-coveralls; pyenv rehash;"
+ 
 
 before_install:
   - eval "${MATRIX_EVAL}"
+  - eval "${MATRIX_EVAL_OSX_COVERALLS}"
   - PARENTDIR=$(pwd)
   - mkdir $PARENTDIR/build
   - pip install --user cpp-coveralls
@@ -43,7 +46,7 @@ script:
   - make coverage
 
 after_success:
-  - cd $PARENTDIR/build/tests/
+  - cd $PARENTDIR/build/
   - coveralls --exclude lib --exclude src --exclude bin
 
     #after_success:
