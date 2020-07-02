@@ -28,7 +28,7 @@ matrix:
       #    update: true
       env:
         - MATRIX_EVAL="CXX_COMPILER=clang++"
-        - MATRIX_EVAL_COVERALLS="brew update; brew install pyenv; eval "$(pyenv init -)"; pyenv install 2.7.6; pyenv global 2.7.6; pyenv rehash; pip install coveralls; pip install cpp-coveralls; pyenv rehash;"
+        - MATRIX_EVAL_COVERALLS="brew install pyenv; eval \"$(pyenv init -)\"; pyenv install 2.7.6; pyenv global 2.7.6; pyenv rehash; pip install coveralls; pip install cpp-coveralls; pyenv rehash;"
  
 
 before_install:
