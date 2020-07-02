@@ -47,7 +47,7 @@ if (CMAKE_BUILD_TYPE STREQUAL "Coverage")
     add_custom_command(TARGET coverage
         COMMAND echo "=================== GCOV ===================="
         COMMAND rm -f ${TEST_MAIN_OBJ_DIR}/test_main.gcno  ${TEST_MAIN_OBJ_DIR}/test_main.gcda  ${TEST_MAIN_OBJ_DIR}/test_main.o
-        COMMAND gcov -m -b ${CMAKE_SOURCE_DIR}/tests/*.cpp -o ${TEST_MAIN_OBJ_DIR} > CoverageSummary.txt
+        COMMAND gcov -b ${CMAKE_SOURCE_DIR}/tests/*.cpp -o ${TEST_MAIN_OBJ_DIR} > CoverageSummary.txt
         COMMAND cat CoverageSummary.txt
         COMMAND echo "-- Coverage files have been output to ${CMAKE_BINARY_DIR}/coverage"
         WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/coverage  # Need separate command for this line
