@@ -12,13 +12,15 @@ endif()
 
 #------------------------------------------------------------------------------#
 # Build type
-if(NOT CMAKE_BUILD_TYPE MATCHES "^(|Debug|Release|RelWithDebInfo|MinSizeRel)$")
-  message(FATAL_ERROR "CMAKE_BUILD_TYPE parameter should be left empty or set to Debug (-D_DEBUG -g), Release, or RelWithDebInfo (-g).")
+if(NOT CMAKE_BUILD_TYPE MATCHES "^(|Debug|Release|RelWithDebInfo|Coverage)$")
+  message(FATAL_ERROR "CMAKE_BUILD_TYPE parameter should be left empty or set to Debug (-D_DEBUG -g), Release, RelWithDebInfo (-g), or Coverage.")
 endif()
 if(CMAKE_BUILD_TYPE MATCHES "Debug")
   add_definitions(-D_DEBUG -g)
 elseif(CMAKE_BUILD_TYPE MATCHES "RelWithDebInfo")
   add_definitions(-g)
+elseif(CMAKE_BUILD_TYPE MATCHES "Coverage")
+  add_definitions(-D_DEBUG -g)
 endif()
 
 # Determine what level of debugging we are using
@@ -38,7 +40,7 @@ elseif(BUILD_DEBUG_LEVEL EQUAL 3)
 endif()
 
 # Check whether the build type and debug level are consistent
-if((BUILD_DEBUG_LEVEL EQUAL 0 AND CMAKE_BUILD_TYPE MATCHES "^(Debug|RelWithDebInfo)$") 
-OR (BUILD_DEBUG_LEVEL GREATER 0 AND CMAKE_BUILD_TYPE MATCHES "^(Release|MinSizeRel)$"))
+if((BUILD_DEBUG_LEVEL EQUAL 0 AND CMAKE_BUILD_TYPE MATCHES "^(Debug|RelWithDebInfo|Coverage)$") 
+OR (BUILD_DEBUG_LEVEL GREATER 0 AND CMAKE_BUILD_TYPE MATCHES "^(Release)$"))
   message(FATAL_ERROR "BUILD_DEBUG_LEVEL is inconsistent with CMAKE_BUILD_TYPE; both parameters should include or exclude debug definitions.")
 endif()

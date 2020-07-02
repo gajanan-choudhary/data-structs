@@ -26,3 +26,39 @@ add_test(
     NAME ${LIBRARY_NAME}.${TEST_MAIN}
     COMMAND ${TEST_MAIN} ${TEST_RUNNER_PARAMS}
 )
+
+# The following is inspired from https://github.com/jhbell/cmake-gcov
+# Adds a 'coverage' target.
+if (CMAKE_BUILD_TYPE STREQUAL "Coverage")
+    # Req.d for getting *.o instead of *.cpp.o obj files during cmake building
+    set(CMAKE_CXX_OUTPUT_EXTENSION_REPLACE ON)
+
+    # Create the gcov target. Run coverage tests with 'make gcov'
+    set(TEST_MAIN_OBJ_DIR "${CMAKE_BINARY_DIR}/tests/CMakeFiles/${TEST_MAIN}.dir")
+    add_custom_target(coverage
+        COMMAND mkdir -p coverage
+        COMMAND ${CMAKE_MAKE_PROGRAM} test
+        WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+        )
+    add_custom_command(TARGET coverage
+        COMMAND echo "=================== GCOV ===================="
+        COMMAND gcov -b ${CMAKE_SOURCE_DIR}/tests/*.cpp -o ${TEST_MAIN_OBJ_DIR} > CoverageSummary.txt
+        COMMAND cat CoverageSummary.txt
+        COMMAND echo "-- Coverage files have been output to ${CMAKE_BINARY_DIR}/coverage"
+        WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/coverage  # Need separate command for this line
+        )
+
+    add_dependencies(coverage ${TEST_MAIN})
+
+    # Make sure to clean up the coverage folder when running make clean
+    set_property(DIRECTORY PROPERTY ADDITIONAL_MAKE_CLEAN_FILES 
+        "${CMAKE_BINARY_DIR}/coverage"
+        )
+    # Make sure to clean up the gcov files when running make clean
+    set_property(DIRECTORY PROPERTY ADDITIONAL_MAKE_CLEAN_FILES 
+        "${TEST_MAIN_OBJ_DIR}/main.gcno"
+        "${TEST_MAIN_OBJ_DIR}/main.gcda"
+        )
+
+endif() #CMAKE_BUILD_TYPE STREQUAL "Coverage"
+
