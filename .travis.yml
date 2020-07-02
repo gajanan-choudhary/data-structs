@@ -47,7 +47,7 @@ script:
 
 after_success:
   - cd $PARENTDIR
-  - coveralls -e build/  --gcov-options '\-lp'
+  - coveralls -e build/CMakeFiles -e build/Testing -e build/lib --e build/bin  --gcov-options '\-lp'
 
     #after_success:
     #  - cd $PARENTDIR/build
