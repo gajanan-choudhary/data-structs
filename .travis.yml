@@ -46,8 +46,8 @@ script:
   - make coverage
 
 after_success:
-  - cd $PARENTDIR/build/
-  - coveralls --exclude lib --exclude src --exclude bin
+  - cd $PARENTDIR
+  - coveralls -e build/
 
     #after_success:
     #  - cd $PARENTDIR/build
