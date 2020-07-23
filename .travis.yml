@@ -13,35 +13,41 @@ matrix:
           sources:
             - ubuntu-toolchain-r-test
           packages:
-            - lcov
+              #- lcov
             - g++-7
       env:
         - MATRIX_EVAL="CXX_COMPILER=g++-7; sudo update-alternatives --install /usr/bin/gcov gcov /usr/bin/gcov-7 90"
+        - MATRIX_EVAL_COVERALLS="pip install --user cpp-coveralls;"
 
     - os: osx
       osx_image: xcode10.1
-      addons:
-        homebrew:
-          packages:
-          - lcov
-          update: true
-
+      #addons:
+      #  homebrew:
+      #    packages:
+      #    - lcov
+      #    update: true
       env:
         - MATRIX_EVAL="CXX_COMPILER=clang++"
-    
+        - MATRIX_EVAL_COVERALLS="brew install pyenv; eval \"$(pyenv init -)\"; pyenv install 2.7.6; pyenv global 2.7.6; pyenv rehash; pip install coveralls; pip install cpp-coveralls; pyenv rehash;"
+ 
 
 before_install:
   - eval "${MATRIX_EVAL}"
+  - eval "${MATRIX_EVAL_COVERALLS}"
   - PARENTDIR=$(pwd)
   - mkdir $PARENTDIR/build
 
 install: 
   - cd $PARENTDIR/build
-  - cmake $PARENTDIR -DCMAKE_BUILD_TYPE=Debug -DBUILD_DEBUG_LEVEL=2 -DCMAKE_CXX_COMPILER=$CXX_COMPILER
+  - cmake $PARENTDIR -DCMAKE_BUILD_TYPE=Coverage -DBUILD_DEBUG_LEVEL=2 -DCMAKE_CXX_COMPILER=$CXX_COMPILER
   - make
 
 script:
-  - make && make test
+  - make coverage
+
+after_success:
+  - cd $PARENTDIR
+  - coveralls -e 'build/CMakeFiles' -e 'build/Testing' -e 'build/lib' -e 'build/bin' --gcov-options '\-lp'
 
     #after_success:
     #  - cd $PARENTDIR/build
