@@ -20,7 +20,7 @@ set(CMAKE_INCLUDE_PATH ${CMAKE_INCLUDE_PATH} "${CMAKE_SOURCE_DIR}/cmake_scripts"
 
 # Build type
 include(CTest)
-#include(Documentation) # Doxygen
+include(Documentation) # Doxygen
 if (CMAKE_BUILD_TYPE STREQUAL "Coverage")
     include(CodeCoverage)
     append_coverage_compiler_flags()
