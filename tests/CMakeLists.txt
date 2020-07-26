@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.6)
 
 # List all files containing tests.
 list(APPEND tests_sources
+    test_list.cpp
     test_copy_and_swap_idiom.cpp
     test_vector.cpp
     test_main.cpp
