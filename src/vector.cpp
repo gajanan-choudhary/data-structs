@@ -49,7 +49,7 @@ double Vector::gety(void){return y;}
 
 /******************************************************************************/
 /**
- * \brief Gets the magnitude of the vector $||\bf{v}||$.
+ * \brief Gets the magnitude of the vector $||v||$.
  */
 double Vector::mag(void){return sqrt(x*x+y*y);}
 

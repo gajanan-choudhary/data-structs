@@ -20,7 +20,7 @@ class Vector {
         /** Class methods. */
 
         /**
-         * \brief Default constructor for Vector object.
+         * \brief Constructor for Vector object.
          */
         Vector(double xx=0.0, double yy=0.0);
 
@@ -50,7 +50,7 @@ class Vector {
         double gety(void);
 
         /**
-         * \brief Gets the magnitude of the vector $||\bf{v}||$.
+         * \brief Gets the magnitude of the vector $||v||$.
          */
         double mag(void);
 
