@@ -49,7 +49,7 @@ class List {
             /** Struct methods. */
 
             //! \brief Parametrized Constructor.
-            Node(Node *n=nullptr, T& d=T());
+            Node(Node *n=nullptr, const T& d=T());
             //Node(Node *n=nullptr, T d=T()) next(n), data(d){}
 
             //! \brief Copy Constructor.
@@ -262,7 +262,7 @@ void swap(List<T> &first, List<T> &second){
 /******************************************************************************/
 //! \brief Constructor.
 template <typename T>
-List<T>::Node :: Node(List<T>::Node *n, T &d): next(n), data(d) {
+List<T>::Node :: Node(List<T>::Node *n, const T &d): next(n), data(d) {
     DEBUG_MSG("Node:: Parametrized C'tor called");
 }
 

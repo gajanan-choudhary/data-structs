@@ -12,33 +12,43 @@ TEST_CASE("Empty List<int>") {
     SUBCASE("Copy C'tor") {
         List<int> v = u;
         CHECK(v.gethead() == nullptr);
-        CHECK(v.gethead() == u.gethead());
     }
     SUBCASE("Copy Assignment") {
         List<int> v;
         v = u;
         CHECK(v.gethead() == nullptr);
-        CHECK(v.gethead() == u.gethead());
-    }
-    SUBCASE("Self Copy Assignment") {
-        u = u;
-        CHECK(u.gethead() == nullptr);
     }
     SUBCASE("Move C'tor") {
         List<int> v = std::move(u);
         CHECK(v.gethead() == nullptr);
-        CHECK(v.gethead() == u.gethead());
     }
     SUBCASE("Move Assignment") {
         List<int> v;
         v = std::move(u);
         CHECK(v.gethead() == nullptr);
-        CHECK(v.gethead() == u.gethead());
+    }
+    SUBCASE("Self Copy Assignment") {
+        u = u;
     }
     SUBCASE("Self Move Assignment") {
         u = std::move(u);
-        CHECK(u.gethead() == nullptr);
     }
+    CHECK(u.gethead() == nullptr);
+}
+
+TEST_CASE("Single-noded List<int>") {
+    DEBUG_MSG(endl);
+    List<int> u;
+    SUBCASE("Insert new node without any arguments."){
+        SUBCASE("Push top."){
+            u.push_top();
+        }
+        SUBCASE("Push bottom."){
+            u.push_bottom();
+        }
+    }
+    CHECK(u.gethead()->getdata() == int());
+    CHECK(u.gethead()->getnext() == nullptr);
 }
 
 TEST_CASE("Single-noded List<int>") {
@@ -46,53 +56,47 @@ TEST_CASE("Single-noded List<int>") {
     List<int> u;
     u.push_top(5);
     DEBUG_MSG("Printing Linked list: "<< u);
-    CHECK(u.gethead()->getdata() == 5);
-    CHECK(u.gethead()->getnext() == nullptr);
+
     SUBCASE("Copy C'tor") {
         List<int> v = u;
-        CHECK(v.gethead() != u.gethead()); // Make sure it copied.
-        CHECK(u.gethead()->getdata() == 5);
-        CHECK(u.gethead()->getnext() == nullptr);
+        CHECK(v.gethead() != u.gethead());
         CHECK(v.gethead()->getdata() == 5);
         CHECK(v.gethead()->getnext() == nullptr);
     }
     SUBCASE("Copy Assignment") {
         List<int> v;
         v = u;
-        CHECK(v.gethead() != u.gethead()); // Make sure it copied.
-        CHECK(u.gethead()->getdata() == 5);
-        CHECK(u.gethead()->getnext() == nullptr);
+        CHECK(v.gethead() != u.gethead());
         CHECK(v.gethead()->getdata() == 5);
         CHECK(v.gethead()->getnext() == nullptr);
     }
     SUBCASE("Self Copy Assignment") {
         u = u;
-        CHECK(u.gethead()->getdata() == 5);
-        CHECK(u.gethead()->getnext() == nullptr);
     }
+    SUBCASE("Self Move Assignment") {
+        u = std::move(u);
+    }
+    CHECK(u.gethead() != nullptr);
+    CHECK(u.gethead()->getdata() == 5);
+    CHECK(u.gethead()->getnext() == nullptr);
+
     SUBCASE("Move C'tor") {
         List<int> v = std::move(u);
-        CHECK(v.gethead() != u.gethead()); // Make sure it moved.
+        CHECK(v.gethead() != u.gethead());
         CHECK(v.gethead()->getdata() == 5);
         CHECK(v.gethead()->getnext() == nullptr);
-        CHECK(u.gethead() == nullptr);
+        CHECK(u.gethead() == nullptr); // Make sure it moved
     }
     SUBCASE("Move Assignment") {
         List<int> v;
         v = std::move(u);
-        CHECK(v.gethead() != u.gethead()); // Make sure it moved.
+        CHECK(v.gethead() != u.gethead());
         CHECK(v.gethead()->getdata() == 5);
         CHECK(v.gethead()->getnext() == nullptr);
-        CHECK(u.gethead() == nullptr);
+        CHECK(u.gethead() == nullptr); // Make sure it moved
     }
-    SUBCASE("Self Move Assignment") {
-        u = std::move(u);
-        CHECK(u.gethead() != nullptr);
-        CHECK(u.gethead()->getdata() == 5);
-        CHECK(u.gethead()->getnext() == nullptr);
-    }
-
 }
+
 TEST_CASE("List Operations - List<int>") {
     DEBUG_MSG(endl);
     List<int> u;
@@ -202,8 +206,21 @@ TEST_CASE("Multiple-noded List<int>") {
     SUBCASE("Overwrite List by copy assignment") {
         List<int> v;
         v.push_top(2140);
-        u = std::move(v);
+        v.push_bottom(7);
+        u = v;
+        CHECK(u.gethead()!=nullptr);
+        CHECK(u.gethead()->getdata() == 2140);
+        CHECK(u.gethead()->getnext()->getdata() == 7);
+        CHECK(u.gethead()->getnext()->getnext() == nullptr);
+        CHECK(v.gethead()!=nullptr);
+        CHECK(v.gethead()->getdata() == 2140);
+        CHECK(v.gethead()->getnext()->getdata() == 7);
+        CHECK(v.gethead()->getnext()->getnext() == nullptr);
         DEBUG_MSG("Printing overwritten Linked list: "<< u);
+        /* Make sure the lists are different and copied. */
+        CHECK(u.gethead()!=v.gethead());
+        CHECK(u.gethead()->getnext()!=v.gethead()->getnext());
+        CHECK((u.gethead()+1)!=(v.gethead()+1)); // Tail
     }
     SUBCASE("Overwrite List by move assignment") {
         List<int> v;
@@ -214,7 +231,16 @@ TEST_CASE("Multiple-noded List<int>") {
         v.push_top(9214305);
         v.push_top(519305);
         u = std::move(v);
+        CHECK(v.gethead()==nullptr);
+        CHECK(u.gethead()!=nullptr);
+        CHECK(u.gethead()->getdata() == 519305);
+        CHECK(u.gethead()->getnext()->getdata() == 9214305);
+        CHECK(u.gethead()->getnext()->getnext()->getdata() == 1429305);
+        CHECK(u.gethead()->getnext()->getnext()->getnext()->getdata() == 915);
         DEBUG_MSG("Printing overwritten Linked list: "<< u);
+        /* Make sure the lists are different. */
+        CHECK(u.gethead()!=v.gethead());
+        CHECK((u.gethead()+1)!=(v.gethead()+1)); // Tail
     }
 }
 
