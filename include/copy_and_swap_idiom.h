@@ -1,4 +1,5 @@
 #include <iostream>
+#include <sstream> // for stringstream. to_string alternative for Win/MinGW
 #include <cstddef> // std::size_t
 #include "debugmacro.h"
 
@@ -62,7 +63,10 @@ public:
         for (size_t i=0; i<ans.len; i++){
             ans.array[i] += a;
         }
-        ans.name += ("+" + std::to_string(a));
+        std::stringstream ss;
+        ss << a;
+        std::string mystr = ss.str();
+        ans.name += ("+" + mystr);
         return ans;
     }
 
