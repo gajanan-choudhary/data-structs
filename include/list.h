@@ -110,6 +110,7 @@ class List {
             if (tail==nullptr) tail = tmp;
         }
 
+        //! \brief Insert data at the end/tail of the list object.
         void push_bottom(T newdata=T()){
             DEBUG_MSG("Node:: Inserting a node at end with data");
             auto tmp = new Node (nullptr, newdata);
@@ -117,6 +118,12 @@ class List {
             tail = tmp;
             if (head==nullptr) head = tmp;
         }
+
+        //! \brief Remove node from the beginnging/head of the list object.
+        void pop_top();
+
+        //! \brief Remove node from the end/tail of the list object.
+        void pop_bottom();
 
 };
 
@@ -170,6 +177,46 @@ List<T>::~List()
         tmp = head->next;
         delete head;
         head = tmp;
+    }
+}
+
+//! \brief Remove node from the beginnging/head of the list object.
+template <typename T>
+void List<T>::pop_top(){
+    DEBUG_MSG("Node:: Removing a node at front of list");
+    if (head==nullptr) throw std::runtime_error("Error! Attempted node removal from an empty list");
+    if (head==tail){ /* Single node in the linked list */
+        delete tail;
+        head = nullptr;
+        tail = nullptr;
+    }
+    else{
+        auto tmp = head;
+        head = head->next;
+        delete tmp;
+    }
+}
+
+//! \brief Remove node from the end/tail of the list object.
+template <typename T>
+void List<T>::pop_bottom(){
+    DEBUG_MSG("Node:: Removing a node at end of list");
+    if (tail==nullptr) throw std::runtime_error("Error! Attempted node removal from an empty list");
+    if (tail==head){ /* Single node in the linked list */
+        delete tail;
+        head = nullptr;
+        tail = nullptr;
+    }
+    else{
+        auto keepMe = head;
+        auto deleteMe = head->next;
+        while (deleteMe->next){
+            keepMe=deleteMe;
+            deleteMe = deleteMe->next;
+        }
+        delete deleteMe;
+        tail = keepMe;
+        tail->next = nullptr;
     }
 }
 

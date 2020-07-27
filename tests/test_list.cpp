@@ -96,8 +96,17 @@ TEST_CASE("Single-noded List<int>") {
 TEST_CASE("List Operations - List<int>") {
     DEBUG_MSG(endl);
     List<int> u;
+    SUBCASE("Exception check - Popping an empty list"){
+        REQUIRE_THROWS_WITH_AS(u.pop_bottom(),
+                "Error! Attempted node removal from an empty list",
+                const std::runtime_error &);
 
-    SUBCASE("top, top, top, top") {
+        REQUIRE_THROWS_WITH_AS(u.pop_top(),
+                "Error! Attempted node removal from an empty list",
+                const std::runtime_error &);
+    }
+
+    SUBCASE("pushtop x 4, popbottom x 4") {
         int arr[]={141, 12, 342, 4521};
         for (int i=0; i<4; i++){
             u.push_top(arr[i]);
@@ -110,8 +119,19 @@ TEST_CASE("List Operations - List<int>") {
             }
             DEBUG_MSG("Printing Linked list: "<< u);
         }
+        for (int i=0; i<4; i++){
+            u.pop_bottom();
+            auto tmp=u.gethead();
+            int j = 0;
+            while(tmp){
+                CHECK(tmp->getdata()==arr[3-j]);
+                tmp=tmp->next;
+                j++;
+            }
+            DEBUG_MSG("Printing Linked list: "<< u);
+        }
     }
-    SUBCASE("bottom, bottom, bottom, bottom") {
+    SUBCASE("pushbottom x 4, poptop x 4") {
         int arr[]={1512, 252, 365, 48};
         for (int i=0; i<4; i++){
             u.push_bottom(arr[i]);
@@ -124,8 +144,19 @@ TEST_CASE("List Operations - List<int>") {
             }
             DEBUG_MSG("Printing Linked list: "<< u);
         }
+        for (int i=0; i<4; i++){
+            u.pop_top();
+            auto tmp=u.gethead();
+            int j = i+1;
+            while(tmp){
+                CHECK(tmp->getdata()==arr[j]);
+                tmp=tmp->next;
+                j++;
+            }
+            DEBUG_MSG("Printing Linked list: "<< u);
+        }
     }
-    SUBCASE("top, bottom, top") {
+    SUBCASE("pushtop, pushbottom, pushtop") {
         int arr[]={1352, 165, 125};
         int ans[]={arr[2], arr[0], arr[1]};
         u.push_top(arr[0]);
@@ -140,7 +171,7 @@ TEST_CASE("List Operations - List<int>") {
         }
         DEBUG_MSG("Printing Linked list: "<< u);
     }
-    SUBCASE("bottom, top, bottom") {
+    SUBCASE("pushbottom, pushtop, pushbottom") {
         int arr[]={216, 1123, 7355};
         int ans[]={arr[1], arr[0], arr[2]};
         u.push_bottom(arr[0]);
@@ -230,9 +261,9 @@ TEST_CASE("Complex Multiple-noded List<List<string>>") {
     sentence2.push_top("OOP");
 
     List<string> sentence3;
-    sentence3.push_top("beautiful!");
-    sentence3.push_top("are");
-    sentence3.push_top("Templates");
+    sentence3.push_bottom("Templates");
+    sentence3.push_bottom("are");
+    sentence3.push_bottom("beautiful!");
 
     List<List<string>> u;
     u.push_top(sentence3);
@@ -254,3 +285,4 @@ TEST_CASE("Complex Multiple-noded List<List<string>>") {
     CHECK(tmp->gethead()->getnext()->getdata() == "are");
     CHECK(tmp->gethead()->getnext()->getnext()->getdata() == "beautiful!");
 }
+
