@@ -23,14 +23,6 @@ class List {
         //! \brief Destructor for List object.
         ~List();
 
-        //! \brief Insert data at the beginnging/head of the list object.
-        void insert_at_front(T newdata=T()){
-            DEBUG_MSG("Node:: Inserting a node with data");
-            auto tmp = new Node (nullptr, newdata);
-            tmp->next = head;
-            head = tmp;
-        }
-
         /** Overloaded operators for the class. */
 
         //! \brief assignment operator.
@@ -101,12 +93,31 @@ class List {
         /**********************************************************************/
         /** List variables */
         Node *head;
+        Node *tail; //! Never allocated. Only pointed to.
 
     public:
         Node *gethead() const {
             DEBUG_MSG("List:: Getting head");
             return head;
         };
+
+
+        //! \brief Insert data at the beginnging/head of the list object.
+        void push_top(T newdata=T()){
+            DEBUG_MSG("Node:: Inserting a node at front with data");
+            auto tmp = new Node (head, newdata);
+            head = tmp;
+            if (tail==nullptr) tail = tmp;
+        }
+
+        void push_bottom(T newdata=T()){
+            DEBUG_MSG("Node:: Inserting a node at end with data");
+            auto tmp = new Node (nullptr, newdata);
+            if (tail!=nullptr) tail->next = tmp;
+            tail = tmp;
+            if (head==nullptr) head = tmp;
+        }
+
 };
 
 /******************************************************************************/
@@ -116,13 +127,13 @@ class List {
 /******************************************************************************/
 //! \brief Parametrized constructor.
 template <typename T>
-List<T>::List() : head(nullptr){
+List<T>::List() : head(nullptr), tail(nullptr) {
     DEBUG_MSG("List:: Parametrized C'tor called");
 }
 
 //! \brief Copy constructor.
 template <typename T>
-List<T>::List(const List<T> & other) : head(other.head)
+List<T>::List(const List<T> & other) : head(other.head), tail(nullptr)
 {
     DEBUG_MSG("List:: Copy C'tor called");
     if (head){
@@ -134,6 +145,7 @@ List<T>::List(const List<T> & other) : head(other.head)
             tmp->next=new List<T>::Node(tmp->next->next, tmp->next->data);
             tmp=tmp->next;
         }
+        tail=tmp;
         DEBUG_MSG("List:: Finished copying the list");
     }
 }

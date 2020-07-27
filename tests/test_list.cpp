@@ -2,6 +2,8 @@
 #include "list.h"
 using namespace std;
 
+
+
 TEST_CASE("Empty List<int>") {
     DEBUG_MSG(endl);
     List<int> u;
@@ -42,7 +44,7 @@ TEST_CASE("Empty List<int>") {
 TEST_CASE("Single-noded List<int>") {
     DEBUG_MSG(endl);
     List<int> u;
-    u.insert_at_front(5);
+    u.push_top(5);
     DEBUG_MSG("Printing Linked list: "<< u);
     CHECK(u.gethead()->getdata() == 5);
     CHECK(u.gethead()->getnext() == nullptr);
@@ -89,14 +91,78 @@ TEST_CASE("Single-noded List<int>") {
         CHECK(u.gethead()->getdata() == 5);
         CHECK(u.gethead()->getnext() == nullptr);
     }
+
+}
+TEST_CASE("List Operations - List<int>") {
+    DEBUG_MSG(endl);
+    List<int> u;
+
+    SUBCASE("top, top, top, top") {
+        int arr[]={141, 12, 342, 4521};
+        for (int i=0; i<4; i++){
+            u.push_top(arr[i]);
+            auto tmp=u.gethead();
+            int j = 0;
+            while(tmp){
+                CHECK(tmp->getdata()==arr[i-j]);
+                tmp=tmp->next;
+                j++;
+            }
+            DEBUG_MSG("Printing Linked list: "<< u);
+        }
+    }
+    SUBCASE("bottom, bottom, bottom, bottom") {
+        int arr[]={1512, 252, 365, 48};
+        for (int i=0; i<4; i++){
+            u.push_bottom(arr[i]);
+            auto tmp=u.gethead();
+            int j = 0;
+            while(tmp){
+                CHECK(tmp->getdata()==arr[j]);
+                tmp=tmp->next;
+                j++;
+            }
+            DEBUG_MSG("Printing Linked list: "<< u);
+        }
+    }
+    SUBCASE("top, bottom, top") {
+        int arr[]={1352, 165, 125};
+        int ans[]={arr[2], arr[0], arr[1]};
+        u.push_top(arr[0]);
+        u.push_bottom(arr[1]);
+        u.push_top(arr[2]);
+        int j=0;
+        auto tmp=u.gethead();
+        while(tmp){
+            CHECK(tmp->getdata()==ans[j]);
+            tmp=tmp->next;
+            j++;
+        }
+        DEBUG_MSG("Printing Linked list: "<< u);
+    }
+    SUBCASE("bottom, top, bottom") {
+        int arr[]={216, 1123, 7355};
+        int ans[]={arr[1], arr[0], arr[2]};
+        u.push_bottom(arr[0]);
+        u.push_top(arr[1]);
+        u.push_bottom(arr[2]);
+        int j=0;
+        auto tmp=u.gethead();
+        while(tmp){
+            CHECK(tmp->getdata()==ans[j]);
+            tmp=tmp->next;
+            j++;
+        }
+        DEBUG_MSG("Printing Linked list: "<< u);
+    }
 }
 
 TEST_CASE("Multiple-noded List<int>") {
     DEBUG_MSG(endl);
     List<int> u;
-    u.insert_at_front(5);
-    u.insert_at_front(1);
-    u.insert_at_front(25);
+    u.push_top(5);
+    u.push_top(1);
+    u.push_top(25);
     DEBUG_MSG("Printing Linked list: "<< u);
     CHECK(u.gethead()->getdata() == 25);
     CHECK(u.gethead()->getnext()->getdata() == 1);
@@ -104,18 +170,18 @@ TEST_CASE("Multiple-noded List<int>") {
     CHECK(u.gethead()->getnext()->getnext()->getnext() == nullptr);
     SUBCASE("Overwrite List by copy assignment") {
         List<int> v;
-        v.insert_at_front(2140);
+        v.push_top(2140);
         u = std::move(v);
         DEBUG_MSG("Printing overwritten Linked list: "<< u);
     }
     SUBCASE("Overwrite List by move assignment") {
         List<int> v;
-        v.insert_at_front(5);
-        v.insert_at_front(9);
-        v.insert_at_front(915);
-        v.insert_at_front(1429305);
-        v.insert_at_front(9214305);
-        v.insert_at_front(519305);
+        v.push_top(5);
+        v.push_top(9);
+        v.push_top(915);
+        v.push_top(1429305);
+        v.push_top(9214305);
+        v.push_top(519305);
         u = std::move(v);
         DEBUG_MSG("Printing overwritten Linked list: "<< u);
     }
@@ -124,9 +190,9 @@ TEST_CASE("Multiple-noded List<int>") {
 TEST_CASE("Multiple-noded List<string>") {
     DEBUG_MSG(endl);
     List<string> u;
-    u.insert_at_front("r");
-    u.insert_at_front("a");
-    u.insert_at_front("b");
+    u.push_top("r");
+    u.push_top("a");
+    u.push_top("b");
     DEBUG_MSG("Printing Linked list: "<< u);
     CHECK(u.gethead()->getdata() == "b");
     CHECK(u.gethead()->getnext()->getdata() == "a");
@@ -134,18 +200,18 @@ TEST_CASE("Multiple-noded List<string>") {
     CHECK(u.gethead()->getnext()->getnext()->getnext() == nullptr);
     SUBCASE("Overwrite List by copy assignment") {
         List<string> v;
-        v.insert_at_front("OOP");
+        v.push_top("OOP");
         u = std::move(v);
         DEBUG_MSG("Printing overwritten Linked list: "<< u);
     }
     SUBCASE("Overwrite List by move assignment") {
         List<string> v;
-        v.insert_at_front("world");
-        v.insert_at_front("o");
-        v.insert_at_front("l");
-        v.insert_at_front("l");
-        v.insert_at_front("e");
-        v.insert_at_front("H");
+        v.push_top("world");
+        v.push_top("o");
+        v.push_top("l");
+        v.push_top("l");
+        v.push_top("e");
+        v.push_top("H");
         u = std::move(v);
         DEBUG_MSG("Printing overwritten Linked list: "<< u);
     }
@@ -155,23 +221,23 @@ TEST_CASE("Complex Multiple-noded List<List<string>>") {
     DEBUG_MSG(endl);
 
     List<string> sentence1;
-    sentence1.insert_at_front("world!");
-    sentence1.insert_at_front("Hello");
+    sentence1.push_top("world!");
+    sentence1.push_top("Hello");
 
     List<string> sentence2;
-    sentence2.insert_at_front("difficult!");
-    sentence2.insert_at_front("is");
-    sentence2.insert_at_front("OOP");
+    sentence2.push_top("difficult!");
+    sentence2.push_top("is");
+    sentence2.push_top("OOP");
 
     List<string> sentence3;
-    sentence3.insert_at_front("beautiful!");
-    sentence3.insert_at_front("are");
-    sentence3.insert_at_front("Templates");
+    sentence3.push_top("beautiful!");
+    sentence3.push_top("are");
+    sentence3.push_top("Templates");
 
     List<List<string>> u;
-    u.insert_at_front(sentence3);
-    u.insert_at_front(sentence2);
-    u.insert_at_front(sentence1);
+    u.push_top(sentence3);
+    u.push_top(sentence2);
+    u.push_top(sentence1);
 
     DEBUG_MSG("Printing Linked list: "<< u);
     auto *tmp = &(u.gethead()->getdata());
