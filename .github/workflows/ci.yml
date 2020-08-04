@@ -42,7 +42,8 @@ jobs:
       run: |
         cd build
         cd bin
-        unit_tests.exe
+        ls
+        unit_tests
     - name: test2
       run: |
         cd build
