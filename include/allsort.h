@@ -42,7 +42,7 @@ void selectsort(T& arr, const int &start, const int &end){
 //! \brief Quick sort
 template<typename T>
 void quicksort(T& arr, const int &start, const int &end){
-    if (end-start < 2){
+    if (end-start < 4){
         insertsort(arr, start, end);
     }
     else{
