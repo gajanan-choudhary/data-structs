@@ -42,20 +42,20 @@ void selectsort(T& arr, const int &start, const int &end){
 //! \brief Quick sort
 template<typename T>
 void quicksort(T& arr, const int &start, const int &end){
-    if (end-start < 5){
+    if (end-start < 2){
         insertsort(arr, start, end);
     }
     else{
-        const int pivotindex = end-1; // Right pivot
-        const auto &pivot = arr[pivotindex];
+        int pivotindex = end-1; // Right pivot
+        auto &pivot = arr[pivotindex];
         int i=start, j=pivotindex-1;
         while (i<j){
             while (arr[i]<pivot) ++i;
             while (arr[j]>pivot) --j;
-            if (i<j) std::swap(arr[i++], arr[j--]);
+            if (i<j) std::swap(arr[i], arr[j]);
         }
         std::swap(arr[i],arr[pivotindex]);
-        quicksort(arr, 0, i);
+        quicksort(arr, start, i);
         quicksort(arr, i+1, end);
     }
 }
