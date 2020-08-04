@@ -46,9 +46,9 @@ void quicksort(T& arr, const int &start, const int &end){
         insertsort(arr, start, end);
     }
     else{
-        int pivotindex = end-1; // Right pivot
+        auto pivotindex = end-1; // Right pivot
         auto &pivot = arr[pivotindex];
-        int i=start, j=pivotindex-1;
+        auto i=start, j=pivotindex-1;
         while (i<j){
             while (arr[i]<pivot) ++i;
             while (arr[j]>pivot) --j;
