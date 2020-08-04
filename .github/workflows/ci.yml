@@ -38,13 +38,13 @@ jobs:
         cmake ..
     - name: build
       run: cmake --build build
-      #- name: test1
-      #- run: |
-      #-   cd build
-      #-   cd bin
-      #-   cd Debug
-      #-   #(ls -n) -split "`n" -join " "
-      #-   .\unit_tests.exe
+    - name: test1
+      run: |
+        cd build
+        cd bin
+        cd Debug
+        #(ls -n) -split "`n" -join " "
+        .\unit_tests.exe
     - name: test2
       run: |
         cd build
