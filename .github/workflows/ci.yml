@@ -43,7 +43,7 @@ jobs:
         cd build
         cd bin
         cd Debug
-        \.unit_tests.exe
+        unit_tests.exe
     - name: test2
       run: |
         cd build
