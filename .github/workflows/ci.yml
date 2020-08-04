@@ -15,7 +15,11 @@ jobs:
       run: mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Debug -DBUILD_DEBUG_LEVEL=2 ..
     - name: build
       run: cmake --build build
-    - name: test
+    - name: test1
+      run: |
+        cd build/bin/
+        ./unit_tests
+    - name: test2
       run: cd build && ctest
 
 
