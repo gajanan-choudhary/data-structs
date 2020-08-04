@@ -43,7 +43,7 @@ jobs:
         cd build
         cd bin
         cd Debug
-        (ls -n) -split "`n" -join " "
+        #(ls -n) -split "`n" -join " "
         .\unit_tests.exe
     - name: test2
       run: |
