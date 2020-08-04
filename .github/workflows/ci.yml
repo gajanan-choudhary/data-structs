@@ -38,8 +38,16 @@ jobs:
         cmake ..
     - name: build
       run: cmake --build build
-    - name: test
+    - name: test1
       run: |
         cd build
         set CTEST_OUTPUT_ON_FAILURE=1
-        ctest -C Debug 
+        ctest -C Debug
+    - name: test2
+      run: |
+        cd build
+        cd bin
+        cd Debug
+        \.unit_tests.exe
+
+
