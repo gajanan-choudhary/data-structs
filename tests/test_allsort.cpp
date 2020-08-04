@@ -63,7 +63,7 @@ void sorttemplate(T &v, const int &nelems, const int &sorter, std::string &type,
 
 /******************************************************************************/
 TEST_CASE("Sort vector<int>") {
-    int NELEMS[2] = {418, 419};
+    int NELEMS[2] = {58, 59};
     for (const auto &nelems : NELEMS){
         std::cout << std::endl;
         auto random_data = create_random_data(nelems);
