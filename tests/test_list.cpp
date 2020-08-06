@@ -33,6 +33,9 @@ TEST_CASE("Empty List<int>") {
     SUBCASE("Self Move Assignment") {
         u = std::move(u);
     }
+    SUBCASE("Reverse") {
+        u.reverse();
+    }
     CHECK(u.gethead() == nullptr);
 }
 
@@ -46,6 +49,10 @@ TEST_CASE("Single-noded List<int>") {
         SUBCASE("Push bottom."){
             u.push_bottom();
         }
+    }
+    SUBCASE("Reverse") {
+        u.push_top();
+        u.reverse();
     }
     CHECK(u.gethead()->getdata() == int());
     CHECK(u.gethead()->getnext() == nullptr);
@@ -75,6 +82,9 @@ TEST_CASE("Single-noded List<int>") {
     }
     SUBCASE("Self Move Assignment") {
         u = std::move(u);
+    }
+    SUBCASE("Reverse") {
+        u.reverse();
     }
     CHECK(u.gethead() != nullptr);
     CHECK(u.gethead()->getdata() == 5);
@@ -242,6 +252,14 @@ TEST_CASE("Multiple-noded List<int>") {
         CHECK(u.gethead()!=v.gethead());
         CHECK((u.gethead()+1)!=(v.gethead()+1)); // Tail
     }
+    SUBCASE("Reverse the list"){
+        u.reverse();
+        DEBUG_MSG("Printing reversed Linked list: "<< u);
+        CHECK(u.gethead()->getdata() == 5);
+        CHECK(u.gethead()->getnext()->getdata() == 1);
+        CHECK(u.gethead()->getnext()->getnext()->getdata() == 25);
+        CHECK(u.gethead()->getnext()->getnext()->getnext() == nullptr);
+    }
 }
 
 TEST_CASE("Multiple-noded List<string>") {
@@ -281,23 +299,23 @@ TEST_CASE("Complex Multiple-noded List<List<string>>") {
     sentence1.push_top("world!");
     sentence1.push_top("Hello");
 
-    List<string> sentence2;
+    decltype(sentence1) sentence2;
     sentence2.push_top("difficult!");
     sentence2.push_top("is");
     sentence2.push_top("OOP");
 
-    List<string> sentence3;
+    decltype(sentence1) sentence3;
     sentence3.push_bottom("Templates");
     sentence3.push_bottom("are");
     sentence3.push_bottom("beautiful!");
 
-    List<List<string>> u;
+    List<decltype(sentence1)> u;
     u.push_top(sentence3);
     u.push_top(sentence2);
     u.push_top(sentence1);
 
     DEBUG_MSG("Printing Linked list: "<< u);
-    auto *tmp = &(u.gethead()->getdata());
+    List<string> *tmp = &(u.gethead()->getdata());
     CHECK(tmp->gethead()->getdata() == "Hello");
     CHECK(tmp->gethead()->getnext()->getdata() == "world!");
 
@@ -310,5 +328,44 @@ TEST_CASE("Complex Multiple-noded List<List<string>>") {
     CHECK(tmp->gethead()->getdata() == "Templates");
     CHECK(tmp->gethead()->getnext()->getdata() == "are");
     CHECK(tmp->gethead()->getnext()->getnext()->getdata() == "beautiful!");
+
+    SUBCASE("Reverse list-of-lists."){
+        u.reverse();
+        DEBUG_MSG("Printing reversed Linked list: "<< u);
+        auto *tmp = &(u.gethead()->getdata());
+        CHECK(tmp->gethead()->getdata() == "Templates");
+        CHECK(tmp->gethead()->getnext()->getdata() == "are");
+        CHECK(tmp->gethead()->getnext()->getnext()->getdata() == "beautiful!");
+    
+        tmp = &(u.gethead()->getnext()->getdata());
+        CHECK(tmp->gethead()->getdata() == "OOP");
+        CHECK(tmp->gethead()->getnext()->getdata() == "is");
+        CHECK(tmp->gethead()->getnext()->getnext()->getdata() == "difficult!");
+    
+        tmp = &(u.gethead()->getnext()->getnext()->getdata());
+        CHECK(tmp->gethead()->getdata() == "Hello");
+        CHECK(tmp->gethead()->getnext()->getdata() == "world!");
+        SUBCASE("Reverse lists inside list-of-lists."){
+            auto *tmp1 = &(u.gethead()->getdata());
+            tmp1->reverse();
+            DEBUG_MSG("Printing reversed Linked list: "<< u);
+            CHECK(tmp1->gethead()->getdata() == "beautiful!");
+            CHECK(tmp1->gethead()->getnext()->getdata() == "are");
+            CHECK(tmp1->gethead()->getnext()->getnext()->getdata() == "Templates");
+
+            tmp1 = &(u.gethead()->getnext()->getdata());
+            tmp1->reverse();
+            DEBUG_MSG("Printing reversed Linked list: "<< u);
+            CHECK(tmp1->gethead()->getdata() == "difficult!");
+            CHECK(tmp1->gethead()->getnext()->getdata() == "is");
+            CHECK(tmp1->gethead()->getnext()->getnext()->getdata() == "OOP");
+
+            tmp1 = &(u.gethead()->getnext()->getnext()->getdata());
+            tmp1->reverse();
+            DEBUG_MSG("Printing reversed Linked list: "<< u);
+            CHECK(tmp1->gethead()->getdata() == "world!");
+            CHECK(tmp1->gethead()->getnext()->getdata() == "Hello");
+        }
+    }
 }
 
