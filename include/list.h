@@ -68,7 +68,7 @@ class List {
             Node & operator=(Node &&) = delete;
 
             //! \brief Data Getter function.
-            const T & getdata() const {
+            T & getdata() {
                 DEBUG_MSG("Node:: Getting data");
                 return data;
             }
@@ -78,7 +78,7 @@ class List {
                 data = newdata;
             }
             //! \brief Next getter function.
-            Node* getnext() const {
+            Node* getnext() {
                 DEBUG_MSG("Node:: Getting next");
                 return next;
             }
@@ -96,7 +96,7 @@ class List {
         Node *tail; //! Never allocated. Only pointed to.
 
     public:
-        Node *gethead() const {
+        Node *gethead() {
             DEBUG_MSG("List:: Getting head");
             return head;
         };
@@ -124,6 +124,9 @@ class List {
 
         //! \brief Remove node from the end/tail of the list object.
         void pop_bottom();
+
+        //! \brief Reverse the linked list.
+        void reverse();
 
 };
 
@@ -219,6 +222,23 @@ void List<T>::pop_bottom(){
         tail->next = nullptr;
     }
 }
+
+//! \brief Reverse the linked list.
+template <typename T>
+void List<T>::reverse(){
+    DEBUG_MSG("List:: Reversing the linked list");
+    if (head!=nullptr){
+        decltype(head) prev = nullptr;
+        while (head->next!=nullptr){
+            auto tmp = head->next;
+            head->next = prev;
+            prev = head;
+            head = tmp;
+        }
+        head->next = prev;
+    }
+}
+
 
 /**********************************************************************/
 /** Overloaded Operator. */
