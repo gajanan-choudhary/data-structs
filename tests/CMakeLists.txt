@@ -2,14 +2,15 @@ cmake_minimum_required(VERSION 3.6)
 
 # List all files containing tests.
 list(APPEND tests_sources
+    test_bst.cpp
     test_allsort.cpp
     test_list.cpp
     test_copy_and_swap_idiom.cpp
     test_vector.cpp
-    test_main.cpp
 )
 list(REMOVE_DUPLICATES tests_sources)
 
+list(APPEND tests_sources test_main.cpp) # Always include test_main.cpp
 list(APPEND lib_depends ${LIBRARY_NAME} doctest)
 
 set(TEST_MAIN unit_tests)   # Default name for test executable (change if you wish).
